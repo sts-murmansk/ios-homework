@@ -8,82 +8,43 @@
 import UIKit
 
 class ProfileHeaderView: UIView {
-    var avatarImage = UIImageView()
-    var captionLabel = UILabel()
-    var titleLabel = UILabel()
-    var button = UIButton()
-    var textField = UITextField()
     
     private let captionFontSize = 18.0
     private let titleFontSize = 14.0
     private let textFieldFontSize = 15.0
-    
-    private var statusText = ""
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupSubviews()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init?(coder:) has not been implemented");
-    }
-    
-    func setupSubviews() {
-        initAvatar()
-        initCaption()
-        initTitle()
-        initButton()
-        initTextField()
-        
-        addSubview(avatarImage)
-        addSubview(captionLabel)
-        addSubview(titleLabel)
-        addSubview(button)
-        addSubview(textField)
-    }
-    
-    override func layoutSubviews() {
-        let margin = 16.0 // общий отступ
-        let avatarSize = frame.width / 4.0 // размер картинки
-        let labelsLeft = margin + avatarSize + margin // отступ слева для меток
-        let titleTop = margin + avatarSize + margin - 34 - titleLabel.font.lineHeight // верх нижней надписи
-        let labelsWidth = frame.width - labelsLeft - margin // ширина надписей
-        
-        avatarImage.frame = CGRect(x: margin, y: margin, width: avatarSize, height: avatarSize)
-        avatarImage.layer.cornerRadius = avatarImage.frame.width / 2
-        
-        captionLabel.frame = CGRect(x: labelsLeft, y: 27, width: labelsWidth, height: captionLabel.font.lineHeight)
-        
-        titleLabel.frame = CGRect(x: labelsLeft, y: titleTop, width: labelsWidth, height: titleLabel.font.lineHeight)
-        
-        textField.frame = CGRect (x: labelsLeft, y: titleTop + titleLabel.font.lineHeight + margin, width: labelsWidth, height: 40)
-        
-        button.frame = CGRect(x: margin, y: textField.frame.origin.y + 40.0 + margin, width: frame.width - 2 * margin, height: 50)
-        //button.frame = CGRect(x: margin, y: labelsLeft, width: frame.width - 2 * margin, height: 50)
-    }
-    
-    private func initAvatar() {
+    private let avatarImage: UIImageView = {
+        let avatarImage = UIImageView()
+        avatarImage.translatesAutoresizingMaskIntoConstraints = false
         avatarImage.image = UIImage(named: "Cat")
         avatarImage.contentMode = .scaleAspectFit
         avatarImage.clipsToBounds = true
         avatarImage.layer.borderWidth = 3.0
         avatarImage.layer.borderColor = UIColor.white.cgColor
-    }
+        return avatarImage
+    }()
     
-    private func initCaption() {
+    private lazy var captionLabel: UILabel = {
+        let captionLabel = UILabel()
+        captionLabel.translatesAutoresizingMaskIntoConstraints = false
         captionLabel.text = "Hipster cat"
         captionLabel.textColor = .black
         captionLabel.font = UIFont.systemFont(ofSize: captionFontSize, weight: .bold)
-    }
+        return captionLabel
+    }()
     
-    private func initTitle() {
+    private lazy var titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = "Waiting for something..."
         titleLabel.textColor = .gray
         titleLabel.font = UIFont.systemFont(ofSize: captionFontSize, weight: .regular)
-    }
+        return titleLabel
+    }()
     
-    private func initButton() {
+    private lazy var button: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Show status", for: .normal)
         button.backgroundColor = .init(red: 0.0, green: 0.4, blue: 1.0, alpha: 1.0)
         button.setTitleColor(.white, for: .normal)
@@ -93,9 +54,12 @@ class ProfileHeaderView: UIView {
         button.layer.shadowOpacity = 0.7
         button.layer.cornerRadius = 4.0
         button.addTarget(self, action: #selector(touchAction), for: .touchUpInside)
-    }
+        return button
+    }()
     
-    private func initTextField() {
+    private lazy var textField: UITextField = {
+        let textField = UITextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.backgroundColor = .white
         textField.font = UIFont.systemFont(ofSize: textFieldFontSize, weight: .regular)
         textField.textColor = .black
@@ -107,8 +71,58 @@ class ProfileHeaderView: UIView {
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textField.frame.height))
         textField.leftView = paddingView
         textField.leftViewMode = UITextField.ViewMode.always
+        return textField
+    }()
+    
+    private var statusText = ""
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .green
+        layout()
     }
-
+    
+    required init?(coder: NSCoder) {
+        fatalError("init?(coder:) has not been implemented");
+    }
+    
+    private func layout() {
+        [avatarImage, captionLabel, titleLabel, button, textField].forEach { addSubview($0) }
+ 
+        let margin = 16.0
+        NSLayoutConstraint.activate([
+            // avatar constraint
+            avatarImage.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: margin),
+            avatarImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: margin),
+            avatarImage.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor, multiplier: 0.25),
+            avatarImage.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor, multiplier: 0.25),
+            // captionLabel constraint
+            captionLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 27.0),
+            captionLabel.leadingAnchor.constraint(equalTo: avatarImage.trailingAnchor, constant: margin),
+            captionLabel.heightAnchor.constraint(equalToConstant: captionLabel.font.lineHeight),
+            captionLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -margin),
+            // titleLabel constraint
+            titleLabel.bottomAnchor.constraint(equalTo: avatarImage.bottomAnchor, constant: -34.0),
+            titleLabel.leadingAnchor.constraint(equalTo: captionLabel.leadingAnchor),
+            titleLabel.heightAnchor.constraint(equalToConstant: titleLabel.font.lineHeight),
+            titleLabel.trailingAnchor.constraint(equalTo: captionLabel.trailingAnchor),
+            // textField constraint
+            textField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: margin),
+            textField.leadingAnchor.constraint(equalTo: captionLabel.leadingAnchor),
+            textField.heightAnchor.constraint(equalToConstant: 40.0),
+            textField.trailingAnchor.constraint(equalTo: captionLabel.trailingAnchor),
+            // button constraint
+            button.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: margin),
+            button.leadingAnchor.constraint(equalTo: avatarImage.leadingAnchor),
+            button.trailingAnchor.constraint(equalTo: captionLabel.trailingAnchor),
+            button.heightAnchor.constraint(equalToConstant: 50.0)
+        ])
+    }
+    
+    override func layoutSubviews() {
+        avatarImage.layer.cornerRadius = avatarImage.frame.width / 2
+    }
+    
     @objc private func touchAction() {
         titleLabel.text = statusText
         print("статус")
