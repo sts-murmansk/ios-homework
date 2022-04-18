@@ -22,7 +22,6 @@ class ProfileHeaderView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .green
         setupSubviews()
     }
     
@@ -31,11 +30,11 @@ class ProfileHeaderView: UIView {
     }
     
     func setupSubviews() {
-        avatarImage = createAvatar()
-        captionLabel = createCaption()
-        titleLabel = createTitle()
-        button = createButton()
-        textField = createTextField();
+        initAvatar()
+        initCaption()
+        initTitle()
+        initButton()
+        initTextField()
         
         addSubview(avatarImage)
         addSubview(captionLabel)
@@ -64,34 +63,27 @@ class ProfileHeaderView: UIView {
         //button.frame = CGRect(x: margin, y: labelsLeft, width: frame.width - 2 * margin, height: 50)
     }
     
-    private func createAvatar() -> UIImageView {
-        let avatar = UIImageView()
-        avatar.image = UIImage(named: "Cat")
-        avatar.contentMode = .scaleAspectFit
-        avatar.clipsToBounds = true
-        avatar.layer.borderWidth = 3.0
-        avatar.layer.borderColor = UIColor.white.cgColor
-        return avatar
+    private func initAvatar() {
+        avatarImage.image = UIImage(named: "Cat")
+        avatarImage.contentMode = .scaleAspectFit
+        avatarImage.clipsToBounds = true
+        avatarImage.layer.borderWidth = 3.0
+        avatarImage.layer.borderColor = UIColor.white.cgColor
     }
     
-    private func createCaption() -> UILabel {
-        let label = UILabel()
-        label.text = "Hipster cat"
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: captionFontSize, weight: .bold)
-        return label
+    private func initCaption() {
+        captionLabel.text = "Hipster cat"
+        captionLabel.textColor = .black
+        captionLabel.font = UIFont.systemFont(ofSize: captionFontSize, weight: .bold)
     }
     
-    private func createTitle() -> UILabel {
-        let label = UILabel()
-        label.text = "Waiting for something..."
-        label.textColor = .gray
-        label.font = UIFont.systemFont(ofSize: captionFontSize, weight: .regular)
-        return label
+    private func initTitle() {
+        titleLabel.text = "Waiting for something..."
+        titleLabel.textColor = .gray
+        titleLabel.font = UIFont.systemFont(ofSize: captionFontSize, weight: .regular)
     }
     
-    private func createButton() -> UIButton {
-        let button = UIButton()
+    private func initButton() {
         button.setTitle("Show status", for: .normal)
         button.backgroundColor = .init(red: 0.0, green: 0.4, blue: 1.0, alpha: 1.0)
         button.setTitleColor(.white, for: .normal)
@@ -101,23 +93,20 @@ class ProfileHeaderView: UIView {
         button.layer.shadowOpacity = 0.7
         button.layer.cornerRadius = 4.0
         button.addTarget(self, action: #selector(touchAction), for: .touchUpInside)
-        return button
     }
     
-    private func createTextField() -> UITextField {
-        let field = UITextField()
-        field.backgroundColor = .white
-        field.font = UIFont.systemFont(ofSize: textFieldFontSize, weight: .regular)
-        field.textColor = .black
-        field.layer.borderColor = UIColor.black.cgColor
-        field.layer.borderWidth = 1.0
-        field.layer.cornerRadius = 12.0
-        field.addTarget(self, action: #selector(editAction), for: .editingChanged)
+    private func initTextField() {
+        textField.backgroundColor = .white
+        textField.font = UIFont.systemFont(ofSize: textFieldFontSize, weight: .regular)
+        textField.textColor = .black
+        textField.layer.borderColor = UIColor.black.cgColor
+        textField.layer.borderWidth = 1.0
+        textField.layer.cornerRadius = 12.0
+        textField.addTarget(self, action: #selector(editAction), for: .editingChanged)
         // добавим отступ слева
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: field.frame.height))
-        field.leftView = paddingView
-        field.leftViewMode = UITextField.ViewMode.always
-        return field
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textField.frame.height))
+        textField.leftView = paddingView
+        textField.leftViewMode = UITextField.ViewMode.always
     }
 
     @objc private func touchAction() {
