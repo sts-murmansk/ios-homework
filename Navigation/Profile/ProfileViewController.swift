@@ -27,8 +27,11 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightGray
+        layout()
+    }
+    
+    private func layout() {
         [headerView, button].forEach { view.addSubview($0) }
-        
         NSLayoutConstraint.activate([
             // headerView constraint
             headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -41,6 +44,5 @@ class ProfileViewController: UIViewController {
             button.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             button.heightAnchor.constraint(equalToConstant: 50.0)
         ])
-        
     }
 }

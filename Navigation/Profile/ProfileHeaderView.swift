@@ -21,6 +21,7 @@ class ProfileHeaderView: UIView {
         avatarImage.clipsToBounds = true
         avatarImage.layer.borderWidth = 3.0
         avatarImage.layer.borderColor = UIColor.white.cgColor
+        avatarImage.layer.cornerRadius = 50
         return avatarImage
     }()
     
@@ -78,7 +79,7 @@ class ProfileHeaderView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .green
+        backgroundColor = .systemGray5
         layout()
     }
     
@@ -94,8 +95,8 @@ class ProfileHeaderView: UIView {
             // avatar constraint
             avatarImage.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: margin),
             avatarImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: margin),
-            avatarImage.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor, multiplier: 0.25),
-            avatarImage.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor, multiplier: 0.25),
+            avatarImage.heightAnchor.constraint(equalToConstant: 100.0),
+            avatarImage.widthAnchor.constraint(equalToConstant: 100.0),
             // captionLabel constraint
             captionLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 27.0),
             captionLabel.leadingAnchor.constraint(equalTo: avatarImage.trailingAnchor, constant: margin),
@@ -117,10 +118,6 @@ class ProfileHeaderView: UIView {
             button.trailingAnchor.constraint(equalTo: captionLabel.trailingAnchor),
             button.heightAnchor.constraint(equalToConstant: 50.0)
         ])
-    }
-    
-    override func layoutSubviews() {
-        avatarImage.layer.cornerRadius = avatarImage.frame.width / 2
     }
     
     @objc private func touchAction() {
