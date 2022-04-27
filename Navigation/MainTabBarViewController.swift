@@ -9,26 +9,35 @@ import UIKit
 
 class MainTabBarViewController: UITabBarController {
 
-    let feedVC = FeedViewController()
-    let profileVC = ProfileViewController()
+    private let feedVC: FeedViewController = {
+        $0.title = "Лента"
+        return $0
+    }(FeedViewController())
     
+    private let loginVC: LogInViewController = {
+        $0.title = "Профиль"
+        return $0
+    }(LogInViewController())
+    
+    private lazy var feedNC: UINavigationController = {
+        $0.tabBarItem.title = "Лента"
+        $0.tabBarItem.image = UIImage(systemName: "newspaper")
+        return $0
+    }(UINavigationController(rootViewController: feedVC))
+
+    private lazy var loginNC: UINavigationController = {
+        $0.tabBarItem.title = "Профиль"
+        $0.tabBarItem.image = UIImage(systemName: "person")
+        $0.navigationBar.isHidden = true
+        return $0
+    }(UINavigationController(rootViewController: loginVC))
+        
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setupContollers()
+        layout()
     }
     
-    private func setupContollers() {
-        feedVC.title = "Лента"
-        let feedNC = UINavigationController(rootViewController: feedVC)
-        feedNC.tabBarItem.title = "Лента"
-        feedNC.tabBarItem.image = UIImage(systemName: "newspaper")
-        
-        profileVC.title = "Профиль"
-        let profileNC = UINavigationController(rootViewController: profileVC)
-        profileNC.tabBarItem.title = "Профиль"
-        profileNC.tabBarItem.image = UIImage(systemName: "person")
-        
-        viewControllers = [feedNC, profileNC]
+    private func layout() {
+        viewControllers = [feedNC, loginNC]
     }
 }
