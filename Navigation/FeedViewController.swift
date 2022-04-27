@@ -10,31 +10,28 @@ import UIKit
 class FeedViewController: UIViewController {
     
     private let stackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = . vertical
-        stackView.distribution = .fillEqually
-        stackView.spacing = 10
-        return stackView
-    }()
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.axis = . vertical
+        $0.distribution = .fillEqually
+        $0.spacing = 10
+        return $0
+    }(UIStackView())
     
     private lazy var buttonOne: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Button One", for: .normal)
-        button.backgroundColor = .systemGray
-        button.addTarget(self, action: #selector(touchAction), for: .touchUpInside)
-        return button
-    }()
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.setTitle("Button One", for: .normal)
+        $0.backgroundColor = .systemGray
+        $0.addTarget(self, action: #selector(touchAction), for: .touchUpInside)
+        return $0
+    }(UIButton())
     
     private lazy var buttonTwo: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Button Two", for: .normal)
-        button.backgroundColor = .systemGray3
-        button.addTarget(self, action: #selector(touchAction), for: .touchUpInside)
-        return button
-    }()
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.setTitle("Button Two", for: .normal)
+        $0.backgroundColor = .systemGray3
+        $0.addTarget(self, action: #selector(touchAction), for: .touchUpInside)
+        return $0
+    }(UIButton())
     
     override func viewDidLoad() {
         super.viewDidLoad()

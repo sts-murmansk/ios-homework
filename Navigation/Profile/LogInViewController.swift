@@ -117,13 +117,6 @@ class LogInViewController: UIViewController {
         scrollView.contentInset = .zero
         scrollView.verticalScrollIndicatorInsets = .zero
     }
-
-    /*func setupVC(model: CarModel) {
-        nameLabel.text = model.name
-        carImageView.image = model.image
-        guard let text = model.description else { return }
-        textLabel.text = text + text
-    }*/
     
     private func layout() {
         view.addSubview(scrollView)
@@ -148,6 +141,9 @@ class LogInViewController: UIViewController {
         
         [logoImageView, stackView, loginButton].forEach { contentView.addSubview($0) }
         
+        let margin = 16.0
+        
+        
         NSLayoutConstraint.activate([
             // logoImageView
             logoImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 120),
@@ -157,15 +153,15 @@ class LogInViewController: UIViewController {
             // stackView
             stackView.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 120),
             stackView.heightAnchor.constraint(equalToConstant: 100.0),
-            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16.0),
-            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16.0),
+            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: margin),
+            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -margin),
             // loginButton
-            loginButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 16),
+            loginButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: margin),
             loginButton.heightAnchor.constraint(equalToConstant: 50.0),
             loginButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             loginButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
             /// Обязательно закрепиться к низу  contentView !!!!
-            loginButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16.0)
+            loginButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -margin)
         ])
         
         [userTextField, passwordTextField].forEach { stackView.addArrangedSubview($0) }
@@ -173,7 +169,6 @@ class LogInViewController: UIViewController {
     
     @objc private func touchAction() {
         let profileVC = ProfileViewController()
-        //profileVC.post = Post(title: "Пост")
         navigationController?.pushViewController(profileVC, animated: true)
     }
 }

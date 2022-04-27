@@ -28,7 +28,7 @@ class ProfileHeaderView: UIView {
     private lazy var captionLabel: UILabel = {
         let captionLabel = UILabel()
         captionLabel.translatesAutoresizingMaskIntoConstraints = false
-        captionLabel.text = "Hipster cat"
+        captionLabel.text = "Porsche Cat"
         captionLabel.textColor = .black
         captionLabel.font = UIFont.systemFont(ofSize: captionFontSize, weight: .bold)
         return captionLabel
