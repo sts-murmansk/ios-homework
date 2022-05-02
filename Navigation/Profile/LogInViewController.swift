@@ -91,11 +91,11 @@ class LogInViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layout()
-        view.backgroundColor = .white
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: true)
         nc.addObserver(self, selector: #selector(kbdShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         nc.addObserver(self, selector: #selector(kbdHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -119,6 +119,8 @@ class LogInViewController: UIViewController {
     }
     
     private func layout() {
+        view.backgroundColor = .white
+        
         view.addSubview(scrollView)
         
         NSLayoutConstraint.activate([
@@ -168,8 +170,7 @@ class LogInViewController: UIViewController {
     }
     
     @objc private func touchAction() {
-        let profileVC = ProfileViewController()
-        navigationController?.pushViewController(profileVC, animated: true)
+        navigationController?.pushViewController(ProfileViewController(), animated: true)
     }
 }
 

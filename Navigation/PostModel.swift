@@ -23,6 +23,7 @@ struct PostModel {
         section.append(PostModel(author: "Porsche Cat", description: "Модели 718 созданы для жизни в спортивном стиле. Это среднемоторные спортивные автомобили, которые хранят в себе спортивный дух легендарного Porsche 718 и отличаются современной техникой, демонстрируя это потрясающее сочетание на дорогах нашего мира. С одной лишь целью: добавить эмоции в будни.", image: "Cayman", likes: 198, views: 760))
         section.append(PostModel(author: "Porsche Cat in collaboration with Car Dog", description: "50 лет Porsche Design. В 1972 году профессор Ф. А. Порше – дизайнер культового 911, совершил смелый, но гениальный шаг, создав матово-черный хронограф I, который и по сей день формирует язык дизайна часов от Porsche Design", image: "Carrera", likes: 270, views: 977))
         
+        model.append([PostModel]())
         model.append(section)
         
         return model

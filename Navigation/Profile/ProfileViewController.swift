@@ -13,10 +13,10 @@ class ProfileViewController: UIViewController {
 
     private lazy var tableView: UITableView = {
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.backgroundColor = .white
         $0.dataSource = self
         $0.delegate = self
         $0.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.identifier)
+        $0.register(PhotosTableViewCell.self, forCellReuseIdentifier: PhotosTableViewCell.identifier)
         return $0
     }(UITableView(frame: .zero, style: .grouped))
     
@@ -25,7 +25,13 @@ class ProfileViewController: UIViewController {
         layout()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+        
     private func layout() {
+        view.backgroundColor = .white
         view.addSubview(tableView)
     
         NSLayoutConstraint.activate([
@@ -45,11 +51,19 @@ extension ProfileViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return postModel[section].count
+        if section == 0 {
+            return 1
+        } else {
+            return postModel[section].count
+        }
     }
-
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: PhotosTableViewCell.identifier, for: indexPath) as! PhotosTableViewCell
+            return cell
+        }
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.identifier, for: indexPath) as! PostTableViewCell
         cell.setupCell(postModel[indexPath.section][indexPath.row])
         return cell
@@ -69,5 +83,12 @@ extension ProfileViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         section == 0 ? 220 : 0
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 0
+        {
+            navigationController?.pushViewController(PhotosViewController(), animated: true)
+        }
     }
 }

@@ -28,17 +28,16 @@ class MainTabBarViewController: UITabBarController {
     private lazy var loginNC: UINavigationController = {
         $0.tabBarItem.title = "Профиль"
         $0.tabBarItem.image = UIImage(systemName: "person")
-        $0.navigationBar.isHidden = true
         return $0
     }(UINavigationController(rootViewController: loginVC))
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         layout()
     }
     
     private func layout() {
+        view.backgroundColor = .white
         viewControllers = [feedNC, loginNC]
     }
 }
