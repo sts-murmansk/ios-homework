@@ -10,7 +10,9 @@ import UIKit
 class ProfileViewController: UIViewController {
     
     private let postModel: [[PostModel]] = PostModel.makeData()
-
+    
+    private let headerView = ProfileHeaderView()
+ 
     private lazy var tableView: UITableView = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.dataSource = self
@@ -33,8 +35,9 @@ class ProfileViewController: UIViewController {
     private func layout() {
         view.backgroundColor = .white
         view.addSubview(tableView)
-    
+        
         NSLayoutConstraint.activate([
+            // tableView
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -78,7 +81,8 @@ extension ProfileViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        section == 0 ? ProfileHeaderView() : nil
+        section == 0 ? headerView : nil
+        //section == 0 ? ProfileHeaderView() : nil
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
