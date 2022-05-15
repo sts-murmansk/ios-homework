@@ -9,7 +9,7 @@ import UIKit
 
 class PhotosCollectionViewCell: UICollectionViewCell {
     
-    weak var tapImageDelegate: TapImageProtocol?
+    private weak var tapImageDelegate: TapImageProtocol?
     
     public let photoImageView: UIImageView = {
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -42,7 +42,8 @@ class PhotosCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    func setupCell(_ photoName: String, cornerRadius radius: CGFloat = 0.0) {
+    func setupCell(_ photoName: String, tapDelegate: TapImageProtocol, cornerRadius radius: CGFloat = 0.0) {
+        tapImageDelegate = tapDelegate
         photoImageView.layer.cornerRadius = radius
         photoImageView.image = UIImage(named: photoName)!
     }

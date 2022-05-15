@@ -9,6 +9,10 @@ import UIKit
 
 class PostTableViewCell: UITableViewCell {
 
+    private var cellDeletingEnabled = false
+    private weak var postDelegate: PostProtocol?
+    private var postID: Int = 0
+
     private let authorLabel: UILabel = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.textColor = .black
@@ -21,6 +25,7 @@ class PostTableViewCell: UITableViewCell {
     private let postImageView: UIImageView = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.backgroundColor = .black
+        $0.isUserInteractionEnabled = true
         $0.contentMode = .scaleAspectFit
         $0.clipsToBounds = true
         return $0
@@ -38,6 +43,7 @@ class PostTableViewCell: UITableViewCell {
     private let likesLabel: UILabel = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.textColor = .black
+        $0.isUserInteractionEnabled = true
         $0.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         $0.text = "Likes"
         return $0
@@ -54,19 +60,30 @@ class PostTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layout()
-        //customizeCell()
+        setupGestures()
     }
         
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-        
-    func setupCell(_ model: PostModel) {
-        authorLabel.text = model.author
-        postImageView.image = UIImage(named: model.image)!
-        descriptionLabel.text = model.description
-        likesLabel.text = "Likes: \(model.likes)"
-        viewsLabel.text = "Views: \(model.views)"
+    
+    func enableCellDeleting() {
+        cellDeletingEnabled = true
+    }
+    
+    func setupCell(_ postID: Int, postDelegate: PostProtocol?) {
+        self.postDelegate = postDelegate
+        self.postID = postID
+        if let postDelegate = postDelegate {
+            let postData = postDelegate.getData(withID: postID)
+            authorLabel.text = postData.author
+            if let image = UIImage(named: postData.image) {
+                postImageView.image = image
+            }
+            descriptionLabel.text = postData.description
+            likesLabel.text = "Likes: \(postData.likes)"
+            viewsLabel.text = "Views: \(postData.views)"
+        }
     }
         
     private func layout() {
@@ -97,5 +114,38 @@ class PostTableViewCell: UITableViewCell {
             viewsLabel.trailingAnchor.constraint(equalTo: authorLabel.trailingAnchor),
             viewsLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -margin)
         ])
+    }
+    
+    private func setupGestures() {
+        let tapOnLike = UITapGestureRecognizer(target: self, action: #selector(tapOnLike))
+        likesLabel.addGestureRecognizer(tapOnLike)
+        
+        let tapOnPhoto = UITapGestureRecognizer(target: self, action: #selector(tapOnPhoto))
+        postImageView.addGestureRecognizer(tapOnPhoto)
+        
+        let swipeOnSelf = UISwipeGestureRecognizer(target: self, action: #selector(swipeOnSelf))
+        swipeOnSelf.direction = .left
+        addGestureRecognizer(swipeOnSelf)
+    }
+    
+    @objc private func tapOnLike() {
+        if let postDelegate = postDelegate {
+            likesLabel.text = "Likes: \(postDelegate.addLike(toID: postID))"
+        }
+    }
+    
+    @objc private func tapOnPhoto() {
+        if let postDelegate = postDelegate {
+            viewsLabel.text = "Views: \(postDelegate.addView(toID: postID))"
+            postDelegate.viewDetail(withID: postID)
+        }
+    }
+    
+    @objc private func swipeOnSelf() {
+        if let postDelegate = postDelegate {
+            if cellDeletingEnabled {
+                postDelegate.deletePost(withID: postID)
+            }
+        }
     }
 }

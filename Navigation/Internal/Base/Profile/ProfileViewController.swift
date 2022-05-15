@@ -9,7 +9,7 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     
-    private let postModel: [[PostModel]] = PostModel.makeData()
+    private var postModel: [[PostModel]] = PostModel.makeData()
     
     private let headerView = ProfileHeaderView()
  
@@ -68,7 +68,8 @@ extension ProfileViewController: UITableViewDataSource {
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.identifier, for: indexPath) as! PostTableViewCell
-        cell.setupCell(postModel[indexPath.section][indexPath.row])
+        cell.setupCell(postModel[indexPath.section][indexPath.row].ID, postDelegate: self)
+        cell.enableCellDeleting()
         return cell
     }
 }
@@ -82,7 +83,6 @@ extension ProfileViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         section == 0 ? headerView : nil
-        //section == 0 ? ProfileHeaderView() : nil
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -95,5 +95,49 @@ extension ProfileViewController: UITableViewDelegate {
         {
             navigationController?.pushViewController(PhotosViewController(), animated: true)
         }
+    }
+}
+
+// MARK: - PostProtocol
+
+extension ProfileViewController: PostProtocol {
+    func getIndex(forID: Int) -> Int? {
+        return postModel[1].firstIndex(where: { $0.ID == forID })
+    }
+    
+    func addLike(toID: Int) -> Int {
+        if let index = getIndex(forID: toID) {
+            postModel[1][index].likes += 1
+            tableView.reloadData()
+            return postModel[1][index].likes
+        }
+        return 0
+    }
+    
+    func addView(toID: Int) -> Int {
+        if let index = getIndex(forID: toID) {
+            postModel[1][index].views += 1
+            return postModel[1][index].views
+        }
+        return 0
+    }
+    
+    func deletePost(withID: Int) {
+        if let index = getIndex(forID: withID) {
+            postModel[1].remove(at: index)
+            tableView.reloadData()
+        }
+    }
+    
+    func getData(withID: Int) -> PostModel {
+        if let index = getIndex(forID: withID) {
+            return postModel[1][index]
+        }
+        return PostModel(ID: 0, author: "", description: "", image: "", likes: 0, views: 0)
+    }
+    
+    func viewDetail(withID: Int) {
+        let postVC = PostViewController(postID: withID, postDelegate: self)
+        navigationController?.pushViewController(postVC, animated: true)
     }
 }

@@ -37,59 +37,56 @@ class ProfileHeaderView: UIView {
         $0.isUserInteractionEnabled = true
         $0.layer.borderWidth = 3.0
         $0.layer.borderColor = UIColor.white.cgColor
-        $0.layer.cornerRadius = self.avatarSize / 2.0
+        $0.layer.cornerRadius = avatarSize / 2.0
         return $0
     }(UIImageView())
  
     private lazy var captionLabel: UILabel = {
-        let captionLabel = UILabel()
-        captionLabel.translatesAutoresizingMaskIntoConstraints = false
-        captionLabel.text = "Porsche Cat"
-        captionLabel.textColor = .black
-        captionLabel.font = UIFont.systemFont(ofSize: captionFontSize, weight: .bold)
-        return captionLabel
-    }()
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.text = "Porsche Cat"
+        $0.textColor = .black
+        $0.font = UIFont.systemFont(ofSize: captionFontSize, weight: .bold)
+        return $0
+    }(UILabel())
     
     private lazy var titleLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.text = "Waiting for something..."
-        titleLabel.textColor = .gray
-        titleLabel.font = UIFont.systemFont(ofSize: captionFontSize, weight: .regular)
-        return titleLabel
-    }()
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.text = "Waiting for something..."
+        $0.textColor = .gray
+        $0.font = UIFont.systemFont(ofSize: captionFontSize, weight: .regular)
+        return $0
+    }(UILabel())
     
     private lazy var button: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Show status", for: .normal)
-        button.backgroundColor = .init(red: 0.0, green: 0.4, blue: 1.0, alpha: 1.0)
-        button.setTitleColor(.white, for: .normal)
-        button.layer.shadowOffset = CGSize(width: 4, height: 4)
-        button.layer.shadowRadius = 4.0
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOpacity = 0.7
-        button.layer.cornerRadius = 4.0
-        button.addTarget(self, action: #selector(touchAction), for: .touchUpInside)
-        return button
-    }()
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.setTitle("Show status", for: .normal)
+        $0.backgroundColor = .init(red: 0.0, green: 0.4, blue: 1.0, alpha: 1.0)
+        $0.setTitleColor(.white, for: .normal)
+        $0.layer.shadowOffset = CGSize(width: 4.0, height: 4.0)
+        $0.layer.shadowRadius = 4.0
+        $0.layer.shadowColor = UIColor.black.cgColor
+        $0.layer.shadowOpacity = 0.7
+        $0.layer.cornerRadius = 4.0
+        $0.addTarget(self, action: #selector(touchAction), for: .touchUpInside)
+        return $0
+    }(UIButton())
     
     private lazy var textField: UITextField = {
-        let textField = UITextField()
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.backgroundColor = .white
-        textField.font = UIFont.systemFont(ofSize: textFieldFontSize, weight: .regular)
-        textField.textColor = .black
-        textField.layer.borderColor = UIColor.black.cgColor
-        textField.layer.borderWidth = 1.0
-        textField.layer.cornerRadius = 12.0
-        textField.addTarget(self, action: #selector(editAction), for: .editingChanged)
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.backgroundColor = .white
+        $0.font = UIFont.systemFont(ofSize: textFieldFontSize, weight: .regular)
+        $0.textColor = .black
+        $0.placeholder = "Введите статус"
+        $0.layer.borderColor = UIColor.black.cgColor
+        $0.layer.borderWidth = 1.0
+        $0.layer.cornerRadius = 12.0
+        $0.addTarget(self, action: #selector(editAction), for: .editingChanged)
         // добавим отступ слева
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textField.frame.height))
-        textField.leftView = paddingView
-        textField.leftViewMode = UITextField.ViewMode.always
-        return textField
-    }()
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: $0.frame.height))
+        $0.leftView = paddingView
+        $0.leftViewMode = UITextField.ViewMode.always
+        return $0
+    }(UITextField())
     
     private var statusText = ""
     
@@ -202,8 +199,18 @@ class ProfileHeaderView: UIView {
     }
     
     @objc private func touchAction() {
+        if statusText.count == 0 {
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+                self.textField.backgroundColor = .red
+            } completion: { _ in
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+                    self.textField.backgroundColor = .white
+                }
+            }
+            return
+        }
         titleLabel.text = statusText
-        print("статус: \(statusText)")
+        print("статус: \(statusText)") 
     }
     
     @objc private func editAction() {

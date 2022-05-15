@@ -54,7 +54,7 @@ class LogInViewController: UIViewController {
         $0.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         $0.textColor = .black
         $0.autocapitalizationType = .none
-        $0.placeholder = "Email или Телефон"
+        $0.placeholder = "eMail"
         $0.layer.borderWidth = 0.5
         $0.layer.borderColor =  UIColor.lightGray.cgColor
         $0.delegate = self
