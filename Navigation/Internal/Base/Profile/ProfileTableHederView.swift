@@ -116,6 +116,8 @@ class ProfileHeaderView: UIView {
             avatarImage.heightAnchor.constraint(equalToConstant: avatarSize),
             avatarImage.widthAnchor.constraint(equalToConstant: avatarSize),
             // blackView
+            blackView.topAnchor.constraint(equalTo: topAnchor),
+            blackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             blackView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
             blackView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height),
             // closeButton

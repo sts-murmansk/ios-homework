@@ -9,16 +9,22 @@ import UIKit
 
 class PhotosCollectionViewCell: UICollectionViewCell {
     
-    private let photoImageView: UIImageView = {
+    weak var tapImageDelegate: TapImageProtocol?
+    
+    public let photoImageView: UIImageView = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
+        $0.isUserInteractionEnabled = true
         //$0.layer.cornerRadius = 6
         return $0
     }(UIImageView())
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        let tapImage = UITapGestureRecognizer(target: self, action: #selector(tapAction))
+        photoImageView.addGestureRecognizer(tapImage)
         layout()
     }
     
@@ -39,5 +45,9 @@ class PhotosCollectionViewCell: UICollectionViewCell {
     func setupCell(_ photoName: String, cornerRadius radius: CGFloat = 0.0) {
         photoImageView.layer.cornerRadius = radius
         photoImageView.image = UIImage(named: photoName)!
+    }
+    
+    @objc private func tapAction() {
+        tapImageDelegate?.imageTaped(imageView: photoImageView)
     }
 }

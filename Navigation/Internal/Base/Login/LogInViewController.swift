@@ -10,6 +10,8 @@ import SwiftUI
 
 class LogInViewController: UIViewController {
     
+    private let enableCheckout = true
+    
     private var login = ""
     private let defaultLogin = "login@mail.ru"
 
@@ -204,45 +206,46 @@ class LogInViewController: UIViewController {
     
     @objc private func touchAction() {
         
-        if login.count == 0 || password.count == 0 {
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
-                if self.login.count == 0 {
-                    self.userTextField.backgroundColor = .red
-                }
-                if self.password.count == 0 {
-                    self.passwordTextField.backgroundColor = .red
-                }
-            } completion: { _ in
+        if enableCheckout {
+            if login.count == 0 || password.count == 0 {
                 UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
                     if self.login.count == 0 {
-                        self.userTextField.backgroundColor = .clear
+                        self.userTextField.backgroundColor = .red
                     }
                     if self.password.count == 0 {
-                        self.passwordTextField.backgroundColor = .clear
+                        self.passwordTextField.backgroundColor = .red
+                    }
+                } completion: { _ in
+                    UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+                        if self.login.count == 0 {
+                            self.userTextField.backgroundColor = .clear
+                        }
+                        if self.password.count == 0 {
+                            self.passwordTextField.backgroundColor = .clear
+                        }
                     }
                 }
+                return
             }
-            return
-        }
         
-        if 1...5 ~= password.count {
-            passwordAlertLabel.isHidden = false
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
-                self.passwordAlertLabel.isHidden = true
+            if 1...5 ~= password.count {
+                passwordAlertLabel.isHidden = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+                    self.passwordAlertLabel.isHidden = true
+                }
+                return
             }
-            return
-        }
         
-        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        if !NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: login) {
-            showAlert(title: "Неверное имя пользователя!", message: "Имя пользователя должно являться корректным email адресом.")
-        }
+            let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+            if !NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: login) {
+                showAlert(title: "Неверное имя пользователя!", message: "Имя пользователя должно являться корректным email адресом.")
+            }
         
-        if login != defaultLogin || password != defaulPassword {
-            showAlert(title: "Неверные учетные данные!", message: "Имя пользователя и пароль по умолчанию: \(defaultLogin): \(defaulPassword).")
-            return
+            if login != defaultLogin || password != defaulPassword {
+                showAlert(title: "Неверные учетные данные!", message: "Имя пользователя и пароль по умолчанию: \(defaultLogin): \(defaulPassword).")
+                return
+            }
         }
-      
         navigationController?.pushViewController(ProfileViewController(), animated: true)
     }
     
