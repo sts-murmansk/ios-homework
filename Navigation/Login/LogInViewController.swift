@@ -10,6 +10,12 @@ import SwiftUI
 
 class LogInViewController: UIViewController {
     
+    private var login = ""
+    private let defaultLogin = "login@mail.ru"
+
+    private var password = ""
+    private let defaulPassword = "123456"
+
     private let nc = NotificationCenter.default
 
     private let scrollView: UIScrollView = {
@@ -54,6 +60,7 @@ class LogInViewController: UIViewController {
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: $0.frame.height))
         $0.leftView = paddingView
         $0.leftViewMode = UITextField.ViewMode.always
+        $0.addTarget(self, action: #selector(userTextChanged), for: .editingChanged)
         return $0
     }(UITextField())
     
@@ -70,8 +77,20 @@ class LogInViewController: UIViewController {
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: $0.frame.height))
         $0.leftView = paddingView
         $0.leftViewMode = UITextField.ViewMode.always
+        $0.addTarget(self, action: #selector(passwordTextChanged), for: .editingChanged)
         return $0
     }(UITextField())
+    
+    private var passwordAlertLabel : UILabel = {
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.textColor = .red
+        $0.font = UIFont.systemFont(ofSize: 10, weight: .regular)
+        $0.textAlignment = .center
+        $0.numberOfLines = 1
+        $0.text = "Длина пароля должен быть больше 5!"
+        $0.isHidden = true
+        return $0
+    }(UILabel())
     
     private lazy var loginButton: UIButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -141,7 +160,7 @@ class LogInViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
         
-        [logoImageView, stackView, loginButton].forEach { contentView.addSubview($0) }
+        [logoImageView, stackView, passwordAlertLabel, loginButton].forEach { contentView.addSubview($0) }
         
         let margin = 16.0
         
@@ -157,8 +176,13 @@ class LogInViewController: UIViewController {
             stackView.heightAnchor.constraint(equalToConstant: 100.0),
             stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: margin),
             stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -margin),
+            // passwordAlertLabel
+            passwordAlertLabel.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: margin),
+            passwordAlertLabel.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            passwordAlertLabel.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+            passwordAlertLabel.heightAnchor.constraint(equalToConstant: passwordAlertLabel.font.lineHeight),
             // loginButton
-            loginButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: margin),
+            loginButton.topAnchor.constraint(equalTo: passwordAlertLabel.bottomAnchor, constant: margin),
             loginButton.heightAnchor.constraint(equalToConstant: 50.0),
             loginButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             loginButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
@@ -169,8 +193,65 @@ class LogInViewController: UIViewController {
         [userTextField, passwordTextField].forEach { stackView.addArrangedSubview($0) }
     }
     
+    private func showAlert(title: String, message: String) {
+        let alertController = UIAlertController()
+        let alertAction = UIAlertAction(title: "Закрыть", style: .default)
+        alertController.addAction(alertAction)
+        alertController.title = title
+        alertController.message = message
+        present(alertController, animated: true)
+    }
+    
     @objc private func touchAction() {
+        
+        if login.count == 0 || password.count == 0 {
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+                if self.login.count == 0 {
+                    self.userTextField.backgroundColor = .red
+                }
+                if self.password.count == 0 {
+                    self.passwordTextField.backgroundColor = .red
+                }
+            } completion: { _ in
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+                    if self.login.count == 0 {
+                        self.userTextField.backgroundColor = .clear
+                    }
+                    if self.password.count == 0 {
+                        self.passwordTextField.backgroundColor = .clear
+                    }
+                }
+            }
+            return
+        }
+        
+        if 1...5 ~= password.count {
+            passwordAlertLabel.isHidden = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+                self.passwordAlertLabel.isHidden = true
+            }
+            return
+        }
+        
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        if !NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: login) {
+            showAlert(title: "Неверное имя пользователя!", message: "Имя пользователя должно являться корректным email адресом.")
+        }
+        
+        if login != defaultLogin || password != defaulPassword {
+            showAlert(title: "Неверные учетные данные!", message: "Имя пользователя и пароль по умолчанию: \(defaultLogin): \(defaulPassword).")
+            return
+        }
+      
         navigationController?.pushViewController(ProfileViewController(), animated: true)
+    }
+    
+    @objc private func userTextChanged(_ textField: UITextField) {
+        login = textField.text!
+    }
+    
+    @objc private func passwordTextChanged(_ textField: UITextField) {
+        password = textField.text!
     }
 }
 

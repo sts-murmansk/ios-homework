@@ -59,6 +59,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B75A5D7328310A7800CA8C56 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				B78E84D52818551600CDB295 /* LogInViewController.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
 		B79B9E5C2802FB980002ADD3 = {
 			isa = PBXGroup;
 			children = (
@@ -78,6 +86,7 @@
 		B79B9E672802FB980002ADD3 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				B75A5D7328310A7800CA8C56 /* Login */,
 				B7A51D222805F3F0005FDD87 /* Profile */,
 				B79B9E682802FB980002ADD3 /* AppDelegate.swift */,
 				B79B9E7C2803006C0002ADD3 /* MainTabBarViewController.swift */,
@@ -100,7 +109,6 @@
 				B78E84D92819AEA200CDB295 /* PostTableViewCell.swift */,
 				B7A51D232805F41D005FDD87 /* ProfileTableHederView.swift */,
 				B7A51D252805F451005FDD87 /* ProfileViewController.swift */,
-				B78E84D52818551600CDB295 /* LogInViewController.swift */,
 				B78E84DD281EB95700CDB295 /* PhotosTableViewCell.swift */,
 				B78E84DF281EBDDF00CDB295 /* PhotosViewController.swift */,
 				B78E84E1281EC5FA00CDB295 /* PhotosCollectionViewCell.swift */,
