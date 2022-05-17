@@ -143,31 +143,25 @@ class LogInViewController: UIViewController {
         view.backgroundColor = .white
         
         view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        [logoImageView, stackView, passwordAlertLabel, loginButton].forEach { contentView.addSubview($0) }
+        [userTextField, passwordTextField].forEach { stackView.addArrangedSubview($0) }
+        
+        let margin = 16.0
         
         NSLayoutConstraint.activate([
+            // scrollView
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-        
-        scrollView.addSubview(contentView)
-        
-        NSLayoutConstraint.activate([
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            // contentView
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             /// Обязательно выставить ширину contentView !!!!
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-        ])
-        
-        [logoImageView, stackView, passwordAlertLabel, loginButton].forEach { contentView.addSubview($0) }
-        
-        let margin = 16.0
-        
-        
-        NSLayoutConstraint.activate([
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             // logoImageView
             logoImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 120),
             logoImageView.heightAnchor.constraint(equalToConstant: 100.0),
@@ -191,8 +185,6 @@ class LogInViewController: UIViewController {
             /// Обязательно закрепиться к низу  contentView !!!!
             loginButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -margin)
         ])
-        
-        [userTextField, passwordTextField].forEach { stackView.addArrangedSubview($0) }
     }
     
     private func showAlert(title: String, message: String) {

@@ -43,7 +43,6 @@ class PostViewController: UIViewController {
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
-            // tableView
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),

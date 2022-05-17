@@ -71,7 +71,6 @@ class PhotosViewController: UIViewController {
         view.backgroundColor = .white
         title = "Photo gallery"
         [photosCollection, blackView, bigImageView, closeButton].forEach { view.addSubview($0) }
-        //blackView.addSubview(closeButton)
         
         NSLayoutConstraint.activate([
             // photosCollection
@@ -107,6 +106,7 @@ class PhotosViewController: UIViewController {
                 self.bigImageView.alpha = 0.0
                 self.closeButton.alpha = 0.0
             })
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
 }
 
@@ -163,6 +163,7 @@ extension PhotosViewController: TapImageProtocol {
     
     func imageTaped(imageView: UIImageView) {
         
+        navigationController?.setNavigationBarHidden(true, animated: true)
         bigImageView.image = imageView.image
         
         UIView.animate(
