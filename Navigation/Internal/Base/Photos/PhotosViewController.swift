@@ -107,6 +107,7 @@ class PhotosViewController: UIViewController {
                 self.closeButton.alpha = 0.0
             })
         navigationController?.setNavigationBarHidden(false, animated: true)
+        tabBarController?.tabBar.isHidden = false
     }
 }
 
@@ -164,6 +165,7 @@ extension PhotosViewController: TapImageProtocol {
     func imageTaped(imageView: UIImageView) {
         
         navigationController?.setNavigationBarHidden(true, animated: true)
+        tabBarController?.tabBar.isHidden = true
         bigImageView.image = imageView.image
         
         UIView.animate(

@@ -137,7 +137,9 @@ extension ProfileViewController: PostProtocol {
     }
     
     func viewDetail(withID: Int) {
-        let postVC = PostViewController(postID: withID, postDelegate: self)
-        navigationController?.pushViewController(postVC, animated: true)
+        if !(navigationController?.visibleViewController is PostViewController) {
+            let postVC = PostViewController(postID: withID, postDelegate: self)
+            navigationController?.pushViewController(postVC, animated: true)
+        }
     }
 }
